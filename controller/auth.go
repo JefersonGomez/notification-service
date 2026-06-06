@@ -15,6 +15,15 @@ import (
 3. Guardar el usuario en la BD
 4. Responder con mensaje de éxito */
 
+// @Summary Registro de usuario
+// @Description Crea un nuevo usuario en sistema
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param usuario body models.Usuario true "Datos del usuario"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Router /registro [post]
 func Registro(c *gin.Context) {
 
 	var usuario models.Usuario
@@ -49,6 +58,18 @@ func Registro(c *gin.Context) {
 6. Generar token JWT con el ID del usuario que expire en 24 horas
 7. Responder con el token
 */
+
+// @Summary Login
+// @Description Inicia sesion y retorna un JWT
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param body body object{email=string,password=string} true "Credenciales"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failture 404 {object} map[string]string
+// @Router /login [post]
+
 func Login(c *gin.Context) {
 
 	var usuario models.Usuario

@@ -9,12 +9,26 @@ import (
 	"notification-service/worker"
 	"os"
 
+	_ "notification-service/docs"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+// @title Notification Service API
+// @version 1.0.0
+// @description Sistema de notificacion en tiempo real con WebSockets y Redis
+// @host localhost:9000
+// @BasePath /
+// @schemes http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
 func main() {
 
@@ -56,6 +70,8 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.SetRoutes(r)
 	port := os.Getenv("PORT")

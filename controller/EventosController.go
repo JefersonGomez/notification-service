@@ -22,6 +22,16 @@ Responde con el evento creado
 */
 var DB *gorm.DB
 
+// @Summary      Publicar evento
+// @Description  Publica un evento en Redis y lo guarda en la BD
+// @Tags         Eventos
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Param        evento  body      models.Evento  true  "Datos del evento"
+// @Success      200     {object}  models.Evento
+// @Failure      400     {object}  map[string]string
+// @Router       /eventos [post]
 func PublicarEvento(c *gin.Context) {
 
 	var evento models.Evento
@@ -51,6 +61,15 @@ func PublicarEvento(c *gin.Context) {
 3. Ordenar por fecha más reciente
 4. Responder con la lista
 */
+
+// @Summary      Obtener eventos
+// @Description  Retorna todos los eventos del usuario autenticado
+// @Tags         Eventos
+// @Produce      json
+// @Security     BearerAuth
+// @Success      200  {array}   models.Evento
+// @Failure      400  {object}  map[string]string
+// @Router       /eventos [get]
 func ObtenerEventos(c *gin.Context) {
 	idUsuario := c.GetUint("id")
 
@@ -79,6 +98,15 @@ func ObtenerEventos(c *gin.Context) {
 5. Actualizar leido = true con DB.Model(&evento).Update("leido", true)
 6. Responder con mensaje de éxito */
 
+// @Summary      Marcar evento como leído
+// @Description  Actualiza el campo leido a true
+// @Tags         Eventos
+// @Produce      json
+// @Security     BearerAuth
+// @Param        id   path      int  true  "ID del evento"
+// @Success      200  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Router       /eventos/{id} [patch]
 func MarcarLeido(c *gin.Context) {
 
 	idUsuario := c.GetUint("id")

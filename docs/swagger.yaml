@@ -1,0 +1,132 @@
+basePath: /
+definitions:
+  models.Evento:
+    type: object
+  models.Usuario:
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: Sistema de notificacion en tiempo real con WebSockets y Redis
+  title: Notification Service API
+  version: 1.0.0
+paths:
+  /eventos:
+    get:
+      description: Retorna todos los eventos del usuario autenticado
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Evento'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Obtener eventos
+      tags:
+      - Eventos
+    post:
+      consumes:
+      - application/json
+      description: Publica un evento en Redis y lo guarda en la BD
+      parameters:
+      - description: Datos del evento
+        in: body
+        name: evento
+        required: true
+        schema:
+          $ref: '#/definitions/models.Evento'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Evento'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Publicar evento
+      tags:
+      - Eventos
+  /eventos/{id}:
+    patch:
+      description: Actualiza el campo leido a true
+      parameters:
+      - description: ID del evento
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Marcar evento como leído
+      tags:
+      - Eventos
+  /registro:
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo usuario en sistema
+      parameters:
+      - description: Datos del usuario
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/models.Usuario'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Registro de usuario
+      tags:
+      - Auth
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
