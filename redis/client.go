@@ -12,11 +12,12 @@ var RDB *redis.Client
 
 func ConectarRedis() {
 	RDB = redis.NewClient(&redis.Options{
-		Addr: os.Getenv("REDIS_URL"),
+		Addr:     os.Getenv("REDIS_HOST"),
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB:       0,
 	})
 
 	ctx := context.Background()
-
 	_, err := RDB.Ping(ctx).Result()
 	if err != nil {
 		panic("No se pudo conectar a Redis: " + err.Error())
